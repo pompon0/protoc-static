@@ -31,12 +31,15 @@ jobs:
           repository: ${{ github.event.inputs.repository }}
           ref: ${{ github.event.inputs.ref }}
       - run: bazel build -c opt //:protoc --features=fully_static_link
-      - run: echo "UPLOAD_PATH=$(readlink -f bazel-bin/protoc)" >> $GITHUB_ENV 
-      - run: echo "SHA256=$(sha256 ${{ env.UPLOAD_PATH }})" >> $GITHUB_ENV
+      - run: echo "UPLOAD_PATH=$(bazel info bazel-bin)/protoc" >> $GITHUB_ENV 
+      - id: sha256
+        uses: Huy-Ngo/gha-sha@v1.1.0
+        with:
+          glob: ${{ env.UPLOAD_PATH }}
       - uses: actions/upload-artifact@v3
         with:
           name: protoc
-          path: ${{ env.UPLOAD_PATH }}
+          path: 
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
@@ -44,6 +47,6 @@ jobs:
           draft: true
           tag: ${{ github.event.inputs.release_tag }}_${{ github.event.inputs.run_on }}
           artifacts: ${{ env.UPLOAD_PATH }}
-          body: "sha256 = ${{ env.SHA256 }}"
+          body: "sha256 = ${{ steps.sha256.sha256-checksum }}"
 
 
