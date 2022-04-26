@@ -26,7 +26,7 @@ jobs:
         with:
           repository: ${{ github.event.inputs.repository }}
           ref: ${{ github.event.inputs.ref }}
-      # - run: bazel build -c opt //:protoc --features=fully_static_link
+      - run: bazel build -c opt //:protoc --features=fully_static_link
       - id: bazel_output
         run: echo "::set-output name=PATH::$(bazel info -c opt bazel-bin)/protoc"
       - id: sha256
