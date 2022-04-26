@@ -10,6 +10,7 @@ jobs:
           repository: protocolbuffers/protobuf.git
           ref: main
       - run: bazel build //:protoc
+      - uses: mxschmitt/action-tmate@v3
       - uses: actions/upload-artifact@v3
         with:
           name: protoc
