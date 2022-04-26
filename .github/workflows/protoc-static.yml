@@ -31,7 +31,7 @@ jobs:
           repository: ${{ github.event.inputs.repository }}
           ref: ${{ github.event.inputs.ref }}
       - run: bazel build -c opt //:protoc --features=fully_static_link
-      - run: echo "UPLOAD_PATH=$(bazel info bazel-bin)/protoc" >> $GITHUB_ENV 
+      - run: echo "UPLOAD_PATH=$(bazel info -c opt bazel-bin)/protoc" >> $GITHUB_ENV 
       - id: sha256
         uses: Huy-Ngo/gha-sha@v1.1.0
         with:
