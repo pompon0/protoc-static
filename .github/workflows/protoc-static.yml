@@ -4,20 +4,31 @@ name: static-protoc
 on:
   workflow_dispatch:
     inputs:
-      tag:
+      release_tag:
         description: 'Release tag'
         required: true
+      repository:
+        desciption: 'protobuf repository'
+        required: true
+        default: protocolbuffers/protobuf.git
+      ref:
+        description: 'branch/tag/commit'
+        required: true
+        default: main
+      environment:
+        type: environment
+        description: environment
 jobs:
   compile:
-    name: 
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.event.inputs.environment }}
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: protocolbuffers/protobuf.git
-          ref: main
+          repository: ${{ github.event.inputs.repository }}
+          ref: ${{ github.event.inputs.ref }}
       - run: bazel build -c opt //:protoc --features=fully_static_link
       - run: echo "UPLOAD_PATH=$(readlink -f bazel-bin/protoc)" >> $GITHUB_ENV 
+      - run: echo "SHA256=$(sha256 ${{ env.UPLOAD_PATH }})" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v3
         with:
           name: protoc
@@ -27,7 +38,8 @@ jobs:
           allowUpdates: true
           artifactErrorsFailBuild: true
           draft: true
-          tag: ${{ github.event.inputs.tag }}
+          tag: ${{ github.event.inputs.release_tag }}
           artifacts: ${{ env.UPLOAD_PATH }}
+          body: "${{ github.event.inputs.environment }}\nsha256 = ${{ env.SHA256 }}"
 
 
