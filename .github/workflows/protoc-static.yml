@@ -10,8 +10,8 @@ jobs:
           repository: protocolbuffers/protobuf.git
           ref: main
       - run: bazel build //:protoc
-      - uses: mxschmitt/action-tmate@v3
+      - run: echo "UPLOAD_PATH=$(readlink -f bazel-bin/protoc)" >> $GITHUB_ENV 
       - uses: actions/upload-artifact@v3
         with:
           name: protoc
-          path: bazel-bin/protoc
+          path: ${{ env.UPLOAD_PATH }}
