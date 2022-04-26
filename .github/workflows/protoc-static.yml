@@ -1,0 +1,15 @@
+name: static-protoc
+on: workflow_dispatch
+jobs:
+  compile:
+    name: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: https://github.com/protocolbuffers/protobuf.git
+      - run: bazel build //:protoc
+      - uses: actions/upload-artifact@v3
+        with:
+          name: protoc
+          path: bazel-bin/protoc
