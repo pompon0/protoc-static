@@ -30,9 +30,9 @@ jobs:
       - id: bazel_output
         run: echo '::set-output name=PATH::$(bazel info -c opt bazel-bin)/protoc'
       - id: sha256
-          uses: Huy-Ngo/gha-sha@v1.1.0
-          with:
-            glob: ${{ steps.bazel_output.outputs.PATH }}
+        uses: Huy-Ngo/gha-sha@v1.1.0
+        with:
+          glob: ${{ steps.bazel_output.outputs.PATH }}
       - uses: actions/upload-artifact@v3
         with:
           name: protoc
