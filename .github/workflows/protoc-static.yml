@@ -16,10 +16,10 @@ on:
         required: true
         default: main
 jobs:
-  strategy:
-    matrix:
-      run_on: ["ubuntu-latest","macos-latest","windows-latest"]
   compile:
+    strategy:
+      matrix:
+        run_on: ["ubuntu-latest","macos-latest","windows-latest"]
     runs-on: ${{ matrix.run_on }}
     steps:
       - uses: actions/checkout@v3
