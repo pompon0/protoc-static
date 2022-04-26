@@ -7,7 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: https://github.com/protocolbuffers/protobuf.git
+          repository: protocolbuffers/protobuf.git
       - run: bazel build //:protoc
       - uses: actions/upload-artifact@v3
         with:
