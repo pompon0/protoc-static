@@ -28,7 +28,7 @@ jobs:
           ref: ${{ github.event.inputs.ref }}
       # - run: bazel build -c opt //:protoc --features=fully_static_link
       - id: bazel_output
-        run: echo '::set-output name=PATH::$(bazel info -c opt bazel-bin)/protoc'
+        run: echo "::set-output name=PATH::$(bazel info -c opt bazel-bin)/protoc"
       - id: sha256
         uses: Huy-Ngo/gha-sha@v1.1.0
         with:
