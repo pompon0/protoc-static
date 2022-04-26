@@ -15,12 +15,16 @@ on:
         description: 'branch/tag/commit'
         required: true
         default: main
-      environment:
-        type: environment
-        description: environment
+      run_on:
+        type: choice
+        description: "run-on"
+        options:
+        - ubuntu-latest
+        - macos-latest
+        - windows-latest
 jobs:
   compile:
-    runs-on: ${{ github.event.inputs.environment }}
+    runs-on: ${{ github.event.inputs.run_on }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -38,8 +42,8 @@ jobs:
           allowUpdates: true
           artifactErrorsFailBuild: true
           draft: true
-          tag: ${{ github.event.inputs.release_tag }}
+          tag: ${{ github.event.inputs.release_tag }}_${{ github.event.inputs.run_on }}
           artifacts: ${{ env.UPLOAD_PATH }}
-          body: "${{ github.event.inputs.environment }}\nsha256 = ${{ env.SHA256 }}"
+          body: "sha256 = ${{ env.SHA256 }}"
 
 
