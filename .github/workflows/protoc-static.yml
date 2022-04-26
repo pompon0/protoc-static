@@ -1,7 +1,12 @@
 # use the following action for debugging:
 # https://github.com/mxschmitt/action-tmate
 name: static-protoc
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag'
+        required: true
 jobs:
   compile:
     name: 
@@ -17,3 +22,12 @@ jobs:
         with:
           name: protoc
           path: ${{ env.UPLOAD_PATH }}
+      - uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifactErrorsFailBuild: true
+          draft: true
+          tag: ${{ github.event.inputs.tag }}
+          artifacts: ${{ env.UPLOAD_PATH }}
+
+
