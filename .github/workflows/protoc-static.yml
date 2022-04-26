@@ -27,6 +27,7 @@ jobs:
           repository: ${{ github.event.inputs.repository }}
           ref: ${{ github.event.inputs.ref }}
       - run: bazel build -c opt //:protoc --features=fully_static_link
+      # TODO: this command is what is blocking windows support
       - id: bazel_output
         run: echo "::set-output name=PATH::$(bazel info -c opt bazel-bin)/protoc"
       - id: sha256
@@ -42,8 +43,8 @@ jobs:
           allowUpdates: true
           artifactErrorsFailBuild: true
           draft: true
-          tag: ${{ github.event.inputs.release_tag }}_${{ runner.arch }}_${ runner.os }}
+          tag: ${{ github.event.inputs.release_tag }}_${{ runner.arch }}_${{ runner.os }}
           artifacts: ${{ steps.bazel_output.outputs.PATH }}
-          body: "sha256 = ${{ steps.sha256.outputs.sha256-checksum }}"
+          body: "sha256 = ${{ steps.sha256.outputs }}"
 
 
